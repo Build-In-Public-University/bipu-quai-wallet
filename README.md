@@ -4,9 +4,9 @@
 
 A Quai-native wallet that teaches users what the network is doing while they use it.
 
-## Demo 0 — The Wallet Can See
+## Demo 1 — The Wallet Knows What You Own
 
-This first demo is deliberately read-only. It accepts a Quai address and reads the live native QUAI balance, chain identity, and latest block directly from the Quai Cyprus-1 RPC. The UI labels the RPC method used and distinguishes live chain state from local UI state.
+This demo remains deliberately read-only. It accepts a Quai address and normalizes native QUAI, discovered tokens, and recent token transfer events. Native balance, token list, and activity come from QuaiScan's read-only account API; chain identity and latest block come from the Quai Cyprus-1 RPC. Every card carries a source label.
 
 No keys. No signing. No transaction side effects.
 
