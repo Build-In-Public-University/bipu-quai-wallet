@@ -37,7 +37,7 @@ The default address is the zero address because it is accepted by the active Cyp
 
 - Mainnet Cyprus-1 RPC: `https://rpc.quai.network/cyprus1`
 - Mainnet chain ID: `9`
-- Demo status: local prototype, read-only observer
+- Demo status: local prototype; observation is read-only, signing is provider-gated, validation is browser-local
 - Not implemented yet: production custody hardening, token transaction signing, NFT networks, messaging policy, learner network
 
 The architecture and demo sequence follow `BIPU_Quai_Teaching_Wallet_Hackathon_Roadmap.pdf` in the project brief. Demo 4 is provider-gated and has not been used to broadcast a transaction during development verification.
@@ -45,3 +45,7 @@ The architecture and demo sequence follow `BIPU_Quai_Teaching_Wallet_Hackathon_R
 ## Demo 5 — Ask Quai
 
 Demo 5 adds a bounded, context-aware teaching surface. It answers a small set of questions about the WQUAI state and candidate withdrawal already visible in the wallet. Each answer separates on-chain fact, ecosystem source, and model interpretation. Unknown questions return `No bounded answer is available from the current wallet context` rather than generic ecosystem prose. This first version is local and deterministic: no private data, external model call, or transaction action is used.
+
+## Demo 6 — Understanding Becomes Cached Validation
+
+Demo 6 stores a known WQUAI `withdraw(uint256)` pattern in browser-local storage: destination contract, selector, function, expected effects, and permission condition. A repeat comparison reports `Recognized operation` only when all assumptions match. Changing the contract or selector produces `Re-understand required` and names the changed assumption. The cache reduces repeated explanation cost; it does not replace live chain verification or authorize signing.

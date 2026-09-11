@@ -11,7 +11,7 @@
   <main class="shell">
     <header class="topbar">
       <a class="brand" href="/" aria-label="BIPU Wallet home"><span class="brand-mark">B</span><span>BIPU <em>WALLET</em></span></a>
-      <div class="demo-tag"><span class="live-dot"></span> DEMOS 2–3 / EXPLAIN → PREDICT</div>
+      <div class="demo-tag"><span class="live-dot"></span> DEMOS 0–6 / OBSERVE → UNDERSTAND → VALIDATE</div>
     </header>
     <section class="hero">
       <p class="eyebrow">QUAI NATIVE · NORMALIZED ASSET VIEW</p>
@@ -60,6 +60,16 @@
       <p class="hint ask-copy">Ask about the state already on screen. Answers stay bounded by the wallet context and show their evidence class.</p>
       <div class="address-row"><input id="ask-quai" inputmode="text" autocomplete="off" placeholder="Why do I have WQUAI?" aria-label="Ask Quai a question"><button id="ask-button" type="button">Ask Quai ↗</button></div>
       <div id="ask-output" class="teaching-output" aria-live="polite"><p class="hint">No question asked. The answer surface is local and evidence-labeled.</p></div>
+    </section>
+    <section class="cache-lab" aria-labelledby="cache-title">
+      <div class="section-kicker"><span>06</span><span id="cache-title">DEMO 6 / CACHED VALIDATION</span></div>
+      <p class="hint cache-copy">Remember what was understood. Reuse is allowed only while the assumptions still match.</p>
+      <div class="lab-grid">
+        <div><label for="cached-contract">Destination contract</label><input id="cached-contract" class="mono-input" value="0x006C3e2AaAE5DB1bCd11A1a097cE572312EADdBB" inputmode="text"></div>
+        <div><label for="cached-selector">Function selector</label><input id="cached-selector" class="mono-input" value="0x2e1a7d4d" inputmode="text"></div>
+      </div>
+      <div class="lab-actions"><button id="remember-pattern" type="button">Remember understood pattern</button><button id="compare-pattern" class="secondary" type="button">Compare with cache</button></div>
+      <div id="cache-output" class="teaching-output" aria-live="polite"><p class="hint">No cached pattern. The wallet has not paid the learning cost yet.</p></div>
     </section>
     <section id="state" class="state-area" aria-live="polite">
       <div class="empty-state"><div class="pulse-ring"></div><p>Load an address to normalize its live state.</p></div>

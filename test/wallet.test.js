@@ -50,3 +50,14 @@ test('Demo 5 exposes bounded context-aware Ask Quai teaching', () => {
   assert.match(js, /MODEL INTERPRETATION/);
   assert.match(js, /No bounded answer/);
 });
+
+test('Demo 6 exposes cached validation and named invalidation', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  assert.match(html, /DEMO 6 \/ CACHED VALIDATION/);
+  assert.match(html, /remember-pattern/);
+  assert.match(html, /compare-pattern/);
+  const js = fs.readFileSync(path.join(__dirname, '..', 'src/app.js'), 'utf8');
+  assert.match(js, /localStorage/);
+  assert.match(js, /re-understand required/i);
+  assert.match(js, /changed assumption/i);
+});
