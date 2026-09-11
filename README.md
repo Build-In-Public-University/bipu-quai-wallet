@@ -61,3 +61,7 @@ Demo 8 adds a local policy lab for an NFT holder network. Four deterministic rul
 ## Demo 9 — Practice Before Access
 
 Demo 9 adds an isolated onboarding sandbox. `Issue temporary learner NFT` creates a clearly local, non-transferable learner credential and exposes four practice steps: enter the simulated network, route a bounded red-team message, and inspect a simulated transaction. The learner NFT is not minted, never grants real BIPU membership, and expires when the sandbox is reset. Completed exercises are not interpreted as proof of understanding.
+
+## Demo 10 — Earn the Network
+
+Demo 10 adds observable graduation gates: a temporary learner must exist, a counterfactual must be recognized, and cached understanding must be explicitly invalidated. Only when all three are complete does the local surface say `Understanding demonstrated`; it also retires the learner in the local model. No deployed mint contract is configured, so no permanent NFT is minted and no real BIPU network is unlocked. A future mint remains provider-gated and requires a separate contract, explanation, approval, and readback.

@@ -93,3 +93,13 @@ test('Demo 9 exposes an isolated learner sandbox', () => {
   assert.match(js, /red-team/);
   assert.match(js, /cannot grant real BIPU membership/);
 });
+
+test('Demo 10 exposes behavior-gated graduation without pretending to mint', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  assert.match(html, /DEMO 10 \/ EARN THE NETWORK/);
+  assert.match(html, /graduate/);
+  const js = fs.readFileSync(path.join(__dirname, '..', 'src/app.js'), 'utf8');
+  assert.match(js, /counterfactual/i);
+  assert.match(js, /Understanding demonstrated/);
+  assert.match(js, /no deployed mint contract/i);
+});
