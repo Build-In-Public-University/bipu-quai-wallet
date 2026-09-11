@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10110f">
+  <title>BIPU Wallet — Don't Trust. Understand.</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="BIPU Wallet home"><span class="brand-mark">B</span><span>BIPU <em>WALLET</em></span></a>
+      <div class="demo-tag"><span class="live-dot"></span> DEMO 0 / THE WALLET CAN SEE</div>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">QUAI NATIVE · OBSERVER MODE</p>
+      <h1>Don't Trust.<br><span>Understand.</span></h1>
+      <p class="lede">A wallet should show you what the network knows before it asks you to believe a screen.</p>
+    </section>
+
+    <section class="connect-card" aria-labelledby="connect-title">
+      <div class="section-kicker"><span>01</span><span id="connect-title">CONNECT AN ADDRESS</span></div>
+      <label for="address">Quai address</label>
+      <div class="address-row">
+        <input id="address" inputmode="text" autocomplete="off" spellcheck="false" value="0x0000000000000000000000000000000000000000" aria-describedby="address-hint">
+        <button id="observe" type="button">Observe <span>↗</span></button>
+      </div>
+      <p class="hint" id="address-hint">Read-only. No keys. No signature request. The network is the source of truth.</p>
+      <p class="error" id="error" role="alert" hidden></p>
+    </section>
+
+    <section id="state" class="state-area" aria-live="polite">
+      <div class="empty-state"><div class="pulse-ring"></div><p>Paste an address to observe live Quai state.</p></div>
+    </section>
+
+    <footer><span>BIPU / BUILD IN PUBLIC UNIVERSITY</span><span>CHAIN STATE ≠ UI CACHE</span></footer>
+  </main>
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "bipu-quai-wallet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BIPU's teaching-first Quai wallet — Demo 0: The Wallet Can See.",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  }
+}
