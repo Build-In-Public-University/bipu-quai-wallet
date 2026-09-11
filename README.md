@@ -16,6 +16,10 @@ These are local deterministic interpretations. They do not call `eth_estimateGas
 
 No keys. No signing. No transaction side effects.
 
+## Demo 4 — The Wallet Can Sign What It Explains
+
+Demo 4 adds a provider-gated request path. A compatible browser wallet remains the signer. BIPU requests the active account, prepares a small native QUAI transfer, renders the from/to/value/raw value, and only then exposes `eth_sendTransaction` behind an explicit `Approve & send` click. Verification does not trigger that button.
+
 ## Run it
 
 Requires Node.js 20+.
@@ -34,6 +38,6 @@ The default address is the zero address because it is accepted by the active Cyp
 - Mainnet Cyprus-1 RPC: `https://rpc.quai.network/cyprus1`
 - Mainnet chain ID: `9`
 - Demo status: local prototype, read-only observer
-- Not implemented yet: custody, tokens, transaction decoding, simulation, signing, Ask Quai, NFT networks, messaging policy, learner network
+- Not implemented yet: production custody hardening, token transaction signing, Ask Quai, NFT networks, messaging policy, learner network
 
-The architecture and demo sequence follow `BIPU_Quai_Teaching_Wallet_Hackathon_Roadmap.pdf` in the project brief. The next build boundary is Demo 1: normalized assets and activity.
+The architecture and demo sequence follow `BIPU_Quai_Teaching_Wallet_Hackathon_Roadmap.pdf` in the project brief. Demo 4 is provider-gated and has not been used to broadcast a transaction during development verification.

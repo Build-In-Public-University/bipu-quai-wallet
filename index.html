@@ -45,6 +45,16 @@
       <div class="lab-actions"><button id="explain" type="button">Explain operation</button><button id="simulate" class="secondary" type="button">Predict state change</button></div>
       <div id="teaching-output" class="teaching-output" aria-live="polite"><p class="hint">Choose an action. Understanding comes before permission.</p></div>
     </section>
+    <section class="signing-lab" aria-labelledby="signing-title">
+      <div class="section-kicker"><span>04</span><span id="signing-title">DEMO 4 / SIGN WHAT IT EXPLAINS</span></div>
+      <p class="hint signing-copy">A compatible wallet remains the signer. BIPU prepares the request, explains it, and waits for your approval.</p>
+      <div class="lab-grid">
+        <div><label for="recipient">Recipient</label><input id="recipient" class="mono-input" value="0x0000000000000000000000000000000000000000" inputmode="text"></div>
+        <div><label for="send-amount">Amount</label><div class="amount-row"><input id="send-amount" class="mono-input" value="0.001" inputmode="decimal"><span>QUAI</span></div></div>
+      </div>
+      <div class="lab-actions"><button id="connect-wallet" type="button">Connect compatible wallet</button><button id="prepare-request" class="secondary" type="button" disabled>Prepare explained request</button></div>
+      <div id="signing-output" class="teaching-output" aria-live="polite"><p class="hint">No signer connected. This demo cannot access keys stored elsewhere.</p></div>
+    </section>
     <section id="state" class="state-area" aria-live="polite">
       <div class="empty-state"><div class="pulse-ring"></div><p>Load an address to normalize its live state.</p></div>
     </section>
