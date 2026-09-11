@@ -57,3 +57,7 @@ Demo 7 adds a read-only NFT object and holder-network surface. Enter an indexed 
 ## Demo 8 — Networks Have Boundaries
 
 Demo 8 adds a local policy lab for an NFT holder network. Four deterministic rules can be toggled: current holder required, links quarantined, mutual holders prioritized, and duplicates suppressed. Three synthetic test messages produce visible delivered, summarized, and quarantined outcomes. `Why was this filtered?` names the rule, and the result remains overridable. No real message is sent; on-chain ownership is not treated as identity or contact permission.
+
+## Demo 9 — Practice Before Access
+
+Demo 9 adds an isolated onboarding sandbox. `Issue temporary learner NFT` creates a clearly local, non-transferable learner credential and exposes four practice steps: enter the simulated network, route a bounded red-team message, and inspect a simulated transaction. The learner NFT is not minted, never grants real BIPU membership, and expires when the sandbox is reset. Completed exercises are not interpreted as proof of understanding.

@@ -82,3 +82,14 @@ test('Demo 8 exposes explainable per-network message boundaries', () => {
   assert.match(js, /duplicates suppressed/);
   assert.match(js, /policy outcome/i);
 });
+
+test('Demo 9 exposes an isolated learner sandbox', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  assert.match(html, /DEMO 9 \/ PRACTICE BEFORE ACCESS/);
+  assert.match(html, /issue-learner/);
+  assert.match(html, /simulated network/i);
+  const js = fs.readFileSync(path.join(__dirname, '..', 'src/app.js'), 'utf8');
+  assert.match(js, /temporary learner NFT/);
+  assert.match(js, /red-team/);
+  assert.match(js, /cannot grant real BIPU membership/);
+});
