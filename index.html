@@ -11,7 +11,7 @@
   <main class="shell">
     <header class="topbar">
       <a class="brand" href="/" aria-label="BIPU Wallet home"><span class="brand-mark">B</span><span>BIPU <em>WALLET</em></span></a>
-      <div class="demo-tag"><span class="live-dot"></span> DEMO 1 / WHAT YOU OWN</div>
+      <div class="demo-tag"><span class="live-dot"></span> DEMOS 2–3 / EXPLAIN → PREDICT</div>
     </header>
     <section class="hero">
       <p class="eyebrow">QUAI NATIVE · NORMALIZED ASSET VIEW</p>
@@ -27,6 +27,23 @@
       </div>
       <p class="hint" id="address-hint">Read-only. Every card carries its source. No keys. No signature request.</p>
       <p class="error" id="error" role="alert" hidden></p>
+    </section>
+    <section class="teaching-lab" aria-labelledby="teaching-title">
+      <div class="section-kicker"><span>02</span><span id="teaching-title">TEACHING LAB · WQUAI WITHDRAW</span></div>
+      <div class="lab-grid">
+        <div>
+          <label for="selector">Transaction selector</label>
+          <input id="selector" class="mono-input" value="0x2e1a7d4d" aria-describedby="selector-hint">
+          <p class="hint" id="selector-hint">Known WQUAI pattern: withdraw(uint256). Change it to see the wallet refuse a false match.</p>
+        </div>
+        <div>
+          <label for="amount">Amount to unwrap</label>
+          <div class="amount-row"><input id="amount" class="mono-input" value="1" inputmode="decimal"><span>WQUAI</span></div>
+          <p class="hint">A candidate only. Nothing is signed or broadcast.</p>
+        </div>
+      </div>
+      <div class="lab-actions"><button id="explain" type="button">Explain operation</button><button id="simulate" class="secondary" type="button">Predict state change</button></div>
+      <div id="teaching-output" class="teaching-output" aria-live="polite"><p class="hint">Choose an action. Understanding comes before permission.</p></div>
     </section>
     <section id="state" class="state-area" aria-live="polite">
       <div class="empty-state"><div class="pulse-ring"></div><p>Load an address to normalize its live state.</p></div>

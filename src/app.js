@@ -4,6 +4,9 @@ const addressInput = document.querySelector('#address');
 const observeButton = document.querySelector('#observe');
 const state = document.querySelector('#state');
 const error = document.querySelector('#error');
+const selectorInput = document.querySelector('#selector');
+const amountInput = document.querySelector('#amount');
+const teachingOutput = document.querySelector('#teaching-output');
 
 function isAddress(value) { return /^0x[a-fA-F0-9]{40}$/.test(value.trim()); }
 function big(value) { return BigInt(value); }
@@ -14,6 +17,15 @@ function formatUnits(value, decimals = 18, places = 4) {
 }
 function shortAddress(value) { return `${value.slice(0, 8)}…${value.slice(-6)}`; }
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[char])); }
+const WQUAI_CONTRACT = '0x006C3e2AaAE5DB1bCd11A1a097cE572312EADdBB';
+function readCandidate() { const selector = selectorInput.value.trim().toLowerCase(); const amount = Number(amountInput.value); return { selector, amount: Number.isFinite(amount) && amount > 0 ? amount : 0 }; }
+function explanation(candidate) {
+  const known = candidate.selector === '0x2e1a7d4d' && candidate.amount > 0;
+  return { known, amount: candidate.amount, title: known ? 'Withdraw WQUAI into native QUAI' : 'Unknown operation — re-understand required', intent: known ? `Convert ${candidate.amount} WQUAI into ${candidate.amount} native QUAI.` : 'The selector does not match the known WQUAI withdraw pattern.', why: known ? 'The contract burns or releases the wrapped representation and returns the underlying native asset to the caller.' : 'A selector alone is not enough to infer intent. The contract, method, and expected effect must match.', expected: known ? `WQUAI −${candidate.amount} · QUAI +${candidate.amount} · gas reserved` : 'No state change prediction is safe.', contract: WQUAI_CONTRACT, selector: candidate.selector };
+}
+function renderExplanation() { const result = explanation(readCandidate()); teachingOutput.innerHTML = `<div class="explanation-card ${result.known ? 'known' : 'unknown'}"><div class="explanation-status">${result.known ? 'RECOGNIZED PATTERN' : 'UNDERSTANDING BLOCKED'}</div><h3>${result.title}</h3><div class="explanation-grid"><div><span>INTENT</span><strong>${result.intent}</strong></div><div><span>EXPECTED EFFECT</span><strong>${result.expected}</strong></div><div><span>WHY</span><strong>${result.why}</strong></div><div><span>RAW CALL</span><strong>${result.contract}<br>${result.selector}</strong></div></div><p class="panel-foot">Depth: Simple → Curious → Technical → Raw. This explanation is deterministic wallet interpretation, not a claim that the transaction executed.</p></div>`; }
+function stateDiff() { const result = explanation(readCandidate()); const amount = result.known ? result.amount : 0; return { result, rows: [{ label: 'WQUAI', before: 'current balance', delta: amount ? `−${amount} WQUAI` : 'unknown', certainty: result.known ? 'predicted' : 'blocked' }, { label: 'native QUAI', before: 'current balance', delta: amount ? `+${amount} QUAI` : 'unknown', certainty: result.known ? 'predicted' : 'blocked' }, { label: 'gas', before: 'not queried', delta: result.known ? 'reserved, exact fee unknown' : 'unknown', certainty: 'uncertain' }] }; }
+function renderSimulation() { const diff = stateDiff(); teachingOutput.innerHTML = `<div class="simulation-card ${diff.result.known ? 'known' : 'unknown'}"><div class="explanation-status">${diff.result.known ? 'PRE-SIGN PREDICTION' : 'PREDICTION BLOCKED'}</div><h3>${diff.result.known ? 'What should change if you approve?' : 'No safe prediction available'}</h3>${diff.rows.map((row) => `<div class="diff-row"><strong>${row.label}</strong><span>${row.before}</span><b>${row.delta}</b><em>${row.certainty}</em></div>`).join('')}<p class="uncertainty">⚠ Uncertainty is part of the result: this demo does not execute a call, estimate a fee, or sign. The expected effect is conditional on the contract, caller, and calldata remaining as shown.</p></div>`; }
 async function rpc(method, params = []) {
   const response = await fetch(RPC_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', method, params, id: Date.now() }) });
   if (!response.ok) throw new Error(`RPC responded with HTTP ${response.status}`);
@@ -50,3 +62,5 @@ async function observe() {
   finally { observeButton.disabled = false; observeButton.innerHTML = 'Load state <span>↗</span>'; }
 }
 observeButton.addEventListener('click', observe); addressInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') observe(); });
+document.querySelector('#explain').addEventListener('click', renderExplanation);
+document.querySelector('#simulate').addEventListener('click', renderSimulation);

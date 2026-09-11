@@ -8,6 +8,12 @@ A Quai-native wallet that teaches users what the network is doing while they use
 
 This demo remains deliberately read-only. It accepts a Quai address and normalizes native QUAI, discovered tokens, and recent token transfer events. Native balance, token list, and activity come from QuaiScan's read-only account API; chain identity and latest block come from the Quai Cyprus-1 RPC. Every card carries a source label.
 
+## Demos 2–3 — Explain → Predict
+
+The teaching lab starts with a known WQUAI `withdraw(uint256)` candidate. Demo 2 translates the contract, selector, intent, and expected effect through a progressive explanation. Demo 3 renders a pre-sign state diff: WQUAI decreases, native QUAI increases, and gas remains an explicit uncertainty.
+
+These are local deterministic interpretations. They do not call `eth_estimateGas`, sign, broadcast, or claim that a transaction executed. The WQUAI contract address is sourced from the Quai bridge documentation, and the `withdraw()` selector is the standard EVM selector `0x2e1a7d4d`.
+
 No keys. No signing. No transaction side effects.
 
 ## Run it
