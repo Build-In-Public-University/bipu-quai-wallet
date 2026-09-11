@@ -11,7 +11,7 @@
   <main class="shell">
     <header class="topbar">
       <a class="brand" href="/" aria-label="BIPU Wallet home"><span class="brand-mark">B</span><span>BIPU <em>WALLET</em></span></a>
-      <div class="demo-tag"><span class="live-dot"></span> DEMOS 0–6 / OBSERVE → UNDERSTAND → VALIDATE</div>
+      <div class="demo-tag"><span class="live-dot"></span> DEMOS 0–8 / OBSERVE → UNDERSTAND → BOUND</div>
     </header>
     <section class="hero">
       <p class="eyebrow">QUAI NATIVE · NORMALIZED ASSET VIEW</p>
@@ -70,6 +70,28 @@
       </div>
       <div class="lab-actions"><button id="remember-pattern" type="button">Remember understood pattern</button><button id="compare-pattern" class="secondary" type="button">Compare with cache</button></div>
       <div id="cache-output" class="teaching-output" aria-live="polite"><p class="hint">No cached pattern. The wallet has not paid the learning cost yet.</p></div>
+    </section>
+    <section class="nft-lab" aria-labelledby="nft-title">
+      <div class="section-kicker"><span>07</span><span id="nft-title">DEMO 7 / NFTS ARE NETWORKS</span></div>
+      <p class="hint nft-copy">An NFT is an object and a coordinate. Enter an indexed collection to inspect the object, then find its current holders.</p>
+      <div class="lab-grid">
+        <div><label for="nft-contract">NFT collection contract</label><input id="nft-contract" class="mono-input" placeholder="0x…" inputmode="text"></div>
+        <div><label for="nft-token-id">Token ID</label><input id="nft-token-id" class="mono-input" placeholder="e.g. 1" inputmode="text"></div>
+      </div>
+      <div class="lab-actions"><button id="open-nft" type="button">Open NFT object</button><button id="find-others" class="secondary" type="button">Find the Others</button></div>
+      <div id="nft-output" class="teaching-output" aria-live="polite"><p class="hint">No NFT selected. The live asset view will identify ERC-721 ownership when the indexer reports it.</p></div>
+    </section>
+    <section class="policy-lab" aria-labelledby="policy-title">
+      <div class="section-kicker"><span>08</span><span id="policy-title">DEMO 8 / NETWORK BOUNDARIES</span></div>
+      <p class="hint policy-copy">Membership may be visible on-chain. Contact is still opt-in. These three messages are local test fixtures.</p>
+      <div class="policy-grid">
+        <label><input id="holder-required" type="checkbox" checked> Current holder required</label>
+        <label><input id="links-quarantined" type="checkbox" checked> Links quarantined</label>
+        <label><input id="mutual-prioritized" type="checkbox" checked> Mutual holders prioritized</label>
+        <label><input id="duplicates-suppressed" type="checkbox" checked> Duplicates suppressed</label>
+      </div>
+      <div class="lab-actions"><button id="run-policy" type="button">Process test messages</button></div>
+      <div id="policy-output" class="teaching-output" aria-live="polite"><p class="hint">No messages processed. Policy decisions will be visible, not silent.</p></div>
     </section>
     <section id="state" class="state-area" aria-live="polite">
       <div class="empty-state"><div class="pulse-ring"></div><p>Load an address to normalize its live state.</p></div>

@@ -61,3 +61,24 @@ test('Demo 6 exposes cached validation and named invalidation', () => {
   assert.match(js, /re-understand required/i);
   assert.match(js, /changed assumption/i);
 });
+
+test('Demo 7 exposes a read-only NFT object and holder network', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  assert.match(html, /DEMO 7 \/ NFTS ARE NETWORKS/);
+  assert.match(html, /find-others/);
+  const js = fs.readFileSync(path.join(__dirname, '..', 'src/app.js'), 'utf8');
+  assert.match(js, /getTokenHolders/);
+  assert.match(js, /HOLDER NETWORK/);
+  assert.match(js, /not proof that the collection has no holders/);
+});
+
+test('Demo 8 exposes explainable per-network message boundaries', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  assert.match(html, /DEMO 8 \/ NETWORK BOUNDARIES/);
+  const js = fs.readFileSync(path.join(__dirname, '..', 'src/app.js'), 'utf8');
+  assert.match(js, /why-filtered/);
+  assert.match(js, /current holder required/);
+  assert.match(js, /links quarantined/);
+  assert.match(js, /duplicates suppressed/);
+  assert.match(js, /policy outcome/i);
+});

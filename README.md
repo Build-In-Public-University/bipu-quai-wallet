@@ -49,3 +49,11 @@ Demo 5 adds a bounded, context-aware teaching surface. It answers a small set of
 ## Demo 6 — Understanding Becomes Cached Validation
 
 Demo 6 stores a known WQUAI `withdraw(uint256)` pattern in browser-local storage: destination contract, selector, function, expected effects, and permission condition. A repeat comparison reports `Recognized operation` only when all assumptions match. Changing the contract or selector produces `Re-understand required` and names the changed assumption. The cache reduces repeated explanation cost; it does not replace live chain verification or authorize signing.
+
+## Demo 7 — NFTs Are Networks
+
+Demo 7 adds a read-only NFT object and holder-network surface. Enter an indexed ERC-721 collection contract and token ID to inspect the object anchor, then use `Find the Others` to query current holders through QuaiScan's `token/getTokenHolders` endpoint. The holder list is labeled as current indexer data—not a social graph, proof of physical presence, or permission to contact holders. No NFT metadata or holder records are fabricated when the indexer returns no data.
+
+## Demo 8 — Networks Have Boundaries
+
+Demo 8 adds a local policy lab for an NFT holder network. Four deterministic rules can be toggled: current holder required, links quarantined, mutual holders prioritized, and duplicates suppressed. Three synthetic test messages produce visible delivered, summarized, and quarantined outcomes. `Why was this filtered?` names the rule, and the result remains overridable. No real message is sent; on-chain ownership is not treated as identity or contact permission.
