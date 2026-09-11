@@ -40,3 +40,13 @@ test('server serves the Demo 4 entrypoint', async () => {
   assert.match(await response.text(), /DEMO 4 \/ SIGN WHAT IT EXPLAINS/);
   server.close();
 });
+
+test('Demo 5 exposes bounded context-aware Ask Quai teaching', () => {
+  const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+  assert.match(html, /DEMO 5 \/ ASK QUAI/);
+  assert.match(html, /ask-quai/);
+  const js = fs.readFileSync(path.join(__dirname, '..', 'src/app.js'), 'utf8');
+  assert.match(js, /ON-CHAIN FACT/);
+  assert.match(js, /MODEL INTERPRETATION/);
+  assert.match(js, /No bounded answer/);
+});

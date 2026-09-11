@@ -55,6 +55,12 @@
       <div class="lab-actions"><button id="connect-wallet" type="button">Connect compatible wallet</button><button id="prepare-request" class="secondary" type="button" disabled>Prepare explained request</button></div>
       <div id="signing-output" class="teaching-output" aria-live="polite"><p class="hint">No signer connected. This demo cannot access keys stored elsewhere.</p></div>
     </section>
+    <section class="ask-lab" aria-labelledby="ask-title">
+      <div class="section-kicker"><span>05</span><span id="ask-title">DEMO 5 / ASK QUAI</span></div>
+      <p class="hint ask-copy">Ask about the state already on screen. Answers stay bounded by the wallet context and show their evidence class.</p>
+      <div class="address-row"><input id="ask-quai" inputmode="text" autocomplete="off" placeholder="Why do I have WQUAI?" aria-label="Ask Quai a question"><button id="ask-button" type="button">Ask Quai ↗</button></div>
+      <div id="ask-output" class="teaching-output" aria-live="polite"><p class="hint">No question asked. The answer surface is local and evidence-labeled.</p></div>
+    </section>
     <section id="state" class="state-area" aria-live="polite">
       <div class="empty-state"><div class="pulse-ring"></div><p>Load an address to normalize its live state.</p></div>
     </section>
