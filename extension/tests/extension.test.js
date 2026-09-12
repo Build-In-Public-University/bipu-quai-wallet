@@ -145,6 +145,45 @@ test('Demo 10 blocks premature graduation and never claims a mint', () => {
   assert.doesNotMatch(panel, /mint\(|minted NFT|membership granted/);
 });
 
+test('Phase 1 freezes a non-custodial native transfer intent', async () => {
+  const intent = await import('../core/transaction-intent.js');
+  const result = intent.createNativeTransferIntent({
+    from: '0x1111111111111111111111111111111111111111',
+    to: '0x2222222222222222222222222222222222222222',
+    valueWei: '0x10',
+    sourceBlock: '100'
+  });
+  assert.equal(result.intentVersion, 1);
+  assert.equal(result.chainId, '0x9');
+  assert.equal(result.approval, 'external-provider-required');
+  assert.equal(result.custody, 'bipu-never-holds-private-keys');
+  assert.throws(() => intent.createNativeTransferIntent({
+    from: '0x1111111111111111111111111111111111111111',
+    to: '0x2222222222222222222222222222222222222222',
+    valueWei: '0x1',
+    network: 'unknown-network'
+  }), /Unsupported network/);
+});
+
+test('Phase 1 only calls a matching successful receipt confirmed', async () => {
+  const { createNativeTransferIntent } = await import('../core/transaction-intent.js');
+  const { reconcileReceipt } = await import('../core/reconciliation.js');
+  const intent = createNativeTransferIntent({ from: '0x1111111111111111111111111111111111111111', to: '0x2222222222222222222222222222222222222222', valueWei: '0x10' });
+  const tx = { chainId: '0x9', from: intent.from, to: intent.to, value: intent.valueWei, input: '0x' };
+  assert.equal(reconcileReceipt(intent, tx, { status: '0x1' }).state, 'confirmed');
+  assert.equal(reconcileReceipt(intent, { ...tx, chainId: '0x8' }, { status: '0x1' }).state, 'reconciliation_unknown');
+  assert.equal(reconcileReceipt(intent, tx, { status: '0x0' }).state, 'failed_on_chain');
+});
+
+test('Phase 1 privacy contract disables telemetry and key access', async () => {
+  const { privacySummary } = await import('../core/privacy.js');
+  const privacy = privacySummary();
+  assert.equal(privacy.telemetry, 'disabled-by-default');
+  assert.equal(privacy.privateKeys, 'never-accessed');
+  assert.equal(privacy.pageScraping, 'disabled');
+  assert.equal(privacy.diagnostics, 'user-initiated-and-redacted');
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);
