@@ -66,5 +66,6 @@ Provider acceptance is not confirmation. Final success requires independent read
 - [x] Transaction-intent schema implemented and tested.
 - [x] Reconciliation states implemented and tested.
 - [x] Privacy contract implemented and tested.
-- [ ] Threat model reviewed against the implementation.
+- [x] Threat model drafted against the implementation.
+- [ ] Threat model reviewed against live provider/runtime behavior.
 - [ ] Leo sign-off on the frozen production contract.
