@@ -24,9 +24,9 @@ test('extension shell contains all user-facing entry points', () => {
 
 test('Phase 1 contains explicit no-side-effect boundaries', () => {
   assert.match(read('sidepanel/sidepanel.html'), /No page scraping/);
-  assert.match(read('sidepanel/sidepanel.html'), /Observation is read-only/);
+  assert.match(read('sidepanel/sidepanel.html'), /Provider signing is explicit/);
   assert.match(read('README.md'), /signing/i);
-  assert.doesNotMatch(read('service-worker.js'), /eth_sendTransaction|privateKey|signTransaction/);
+  assert.doesNotMatch(read('service-worker.js'), /privateKey|signTransaction/);
 });
 
 test('Phase 2 keeps live observation in the service worker', () => {
@@ -52,6 +52,18 @@ test('Demos 2 and 3 remain explain-only and fail closed on unknown selectors', (
   assert.match(panel, /Deterministic local interpretation/);
   assert.match(panel, /does not execute, estimate gas, sign, or broadcast/);
   assert.doesNotMatch(panel, /eth_sendTransaction|eth_sign|privateKey/);
+});
+
+test('Demo 4 keeps signing provider-gated and approval-separated', () => {
+  const worker = read('service-worker.js');
+  const panel = read('sidepanel/sidepanel.js');
+  assert.match(worker, /world: 'MAIN'/);
+  assert.match(worker, /eth_requestAccounts/);
+  assert.match(worker, /eth_sendTransaction/);
+  assert.match(panel, /CONNECT_PROVIDER/);
+  assert.match(panel, /EXPLAINED REQUEST · NOT SENT/);
+  assert.match(panel, /Approve &amp; send/);
+  assert.doesNotMatch(panel, /privateKey|signTransaction/);
 });
 
 test('shared state is schema-versioned and merges defaults', () => {

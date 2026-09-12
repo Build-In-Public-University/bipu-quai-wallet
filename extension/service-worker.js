@@ -33,6 +33,23 @@ async function observeAddress(address) {
   return { address, balance, chainId, blockNumber, tokenList, transfers, observedAt: new Date().toISOString(), sources: { rpc: RPC_URL, assets: `${SCAN_URL}?module=account&action=tokenlist`, activity: `${SCAN_URL}?module=account&action=tokentx` } };
 }
 
+async function activeTabId(sender) {
+  const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  const tabId = sender.tab?.id || tabs[0]?.id;
+  if (!tabId) throw new Error('No active tab is available.');
+  return tabId;
+}
+
+async function providerRequest(sender, method, params = []) {
+  const tabId = await activeTabId(sender);
+  const results = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: async (requestMethod, requestParams) => {
+    const candidate = window.pelagus || window.ethereum;
+    if (!candidate?.request) throw new Error('No compatible EVM provider detected.');
+    return { provider: window.pelagus ? 'pelagus' : 'ethereum', result: await candidate.request({ method: requestMethod, params: requestParams }) };
+  }, args: [method, params] });
+  return results[0]?.result;
+}
+
 async function getState() {
   const stored = await chrome.storage.local.get(STATE_KEY);
   return mergeState(stored[STATE_KEY]);
@@ -63,6 +80,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'OBSERVE_ADDRESS') {
     observeAddress(message.address).then((observation) => sendResponse({ ok: true, observation })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message?.type === 'CONNECT_PROVIDER') {
+    providerRequest(sender, 'eth_requestAccounts').then((result) => sendResponse({ ok: true, provider: result.provider, account: result.result?.[0] })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message?.type === 'SEND_TRANSACTION') {
+    providerRequest(sender, 'eth_sendTransaction', [message.transaction]).then((result) => sendResponse({ ok: true, hash: result.result })).catch((error) => sendResponse({ ok: false, error: error.message }));
     return true;
   }
   if (message?.type === 'OPEN_SIDE_PANEL') {
