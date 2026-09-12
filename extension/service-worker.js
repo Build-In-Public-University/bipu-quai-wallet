@@ -1,4 +1,5 @@
 import { DEFAULT_STATE, STATE_KEY, mergeState } from './core/state.js';
+import { answerQuestion } from './core/ask-quai.js';
 
 const RPC_URL = 'https://rpc.quai.network/cyprus1';
 const SCAN_URL = 'https://quaiscan.io/api';
@@ -88,6 +89,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'SEND_TRANSACTION') {
     providerRequest(sender, 'eth_sendTransaction', [message.transaction]).then((result) => sendResponse({ ok: true, hash: result.result })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message?.type === 'ASK_QUAI') {
+    getState().then((state) => sendResponse({ ok: true, answer: answerQuestion(message.question, { selector: message.selector, wquaiBalance: message.wquaiBalance || state.selectedAsset?.balance }) })).catch((error) => sendResponse({ ok: false, error: error.message }));
     return true;
   }
   if (message?.type === 'OPEN_SIDE_PANEL') {

@@ -66,6 +66,18 @@ test('Demo 4 keeps signing provider-gated and approval-separated', () => {
   assert.doesNotMatch(panel, /privateKey|signTransaction/);
 });
 
+test('Demo 5 is bounded, evidence-labeled, and uncertain outside context', () => {
+  const ask = read('core/ask-quai.js');
+  const worker = read('service-worker.js');
+  const panel = read('sidepanel/sidepanel.js');
+  assert.match(ask, /No bounded answer is available from the current wallet context/);
+  assert.match(ask, /ON-CHAIN FACT/);
+  assert.match(ask, /ECOSYSTEM SOURCE/);
+  assert.match(ask, /MODEL INTERPRETATION/);
+  assert.match(worker, /ASK_QUAI/);
+  assert.match(panel, /Uncertainty preserved/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);

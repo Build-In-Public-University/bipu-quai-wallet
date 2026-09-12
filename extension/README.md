@@ -23,5 +23,6 @@ This slice proves the extension architecture and moves Demos 0–3 into it:
 - Demo 1 normalized asset inventory and recent token activity through QuaiScan
 - Demos 2–3 deterministic operation explanation and pre-sign prediction
 - Demo 4 provider-gated native QUAI transfer preparation and approval boundary
+- Demo 5 bounded, evidence-labeled Ask Quai answers tied to observed context
 
-It deliberately has no page scraping, private-key handling, or silent signing. Unknown selectors remain unknown. The extension is useful before it is trusted.
+It deliberately has no page scraping, private-key handling, or silent signing. Unknown selectors and unsupported questions remain unknown. The extension is useful before it is trusted.
