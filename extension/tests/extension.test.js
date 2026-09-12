@@ -15,6 +15,12 @@ test('MV3 manifest has narrow Phase 1 permissions', () => {
   assert.equal(manifest.side_panel.default_path, 'sidepanel/sidepanel.html');
 });
 
+test('popup opens the side panel directly from the user gesture', () => {
+  const popup = read('popup/popup.js');
+  assert.match(popup, /chrome\.sidePanel\.open\(\{ tabId \}\)/);
+  assert.doesNotMatch(popup, /OPEN_SIDE_PANEL/);
+});
+
 test('extension shell contains all user-facing entry points', () => {
   assert.match(read('popup/popup.html'), /Open teaching panel/);
   assert.match(read('sidepanel/sidepanel.html'), /State/);
