@@ -133,6 +133,18 @@ test('Demo 9 keeps the learner sandbox local and quarantines the fixture', () =>
   assert.doesNotMatch(panel, /eth_sendTransaction|signTransaction/);
 });
 
+test('Demo 10 blocks premature graduation and never claims a mint', () => {
+  const graduation = read('core/graduation.js');
+  const panel = read('sidepanel/sidepanel.js');
+  const html = read('sidepanel/sidepanel.html');
+  assert.match(graduation, /GRADUATION INCOMPLETE/);
+  assert.match(graduation, /UNDERSTANDING DEMONSTRATED/);
+  assert.match(panel, /Graduation blocked/);
+  assert.match(panel, /not proof of understanding/);
+  assert.match(html, /not proof of understanding or authorization/);
+  assert.doesNotMatch(panel, /mint\(|minted NFT|membership granted/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);
