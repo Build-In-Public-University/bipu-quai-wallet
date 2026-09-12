@@ -36,6 +36,14 @@ test('Phase 2 keeps live observation in the service worker', () => {
   assert.match(read('sidepanel/sidepanel.html'), /DEMO 0 · LIVE OBSERVER/);
 });
 
+test('Demo 1 keeps normalized assets and activity source-labeled', () => {
+  assert.match(read('service-worker.js'), /tokenlist/);
+  assert.match(read('service-worker.js'), /tokentx/);
+  assert.match(read('sidepanel/sidepanel.js'), /Normalized assets/);
+  assert.match(read('sidepanel/sidepanel.js'), /Recent activity/);
+  assert.match(read('sidepanel/sidepanel.js'), /sources\.rpc/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);

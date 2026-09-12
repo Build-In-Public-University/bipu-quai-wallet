@@ -20,5 +20,6 @@ Phase 2 proves the extension architecture and moves Demo 0 into it:
 - shared schema-versioned local state
 - narrow permissions
 - live Demo 0 native QUAI observation through the service worker
+- Demo 1 normalized asset inventory and recent token activity through QuaiScan
 
 It deliberately has no page scraping, provider detection, keys, signing, messaging, or external writes. The extension is useful before it is trusted.
