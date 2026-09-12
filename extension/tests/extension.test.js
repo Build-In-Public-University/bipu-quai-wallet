@@ -24,9 +24,16 @@ test('extension shell contains all user-facing entry points', () => {
 
 test('Phase 1 contains explicit no-side-effect boundaries', () => {
   assert.match(read('sidepanel/sidepanel.html'), /No page scraping/);
-  assert.match(read('sidepanel/sidepanel.html'), /No RPC calls/);
-  assert.match(read('README.md'), /no RPC reads/i);
+  assert.match(read('sidepanel/sidepanel.html'), /Observation is read-only/);
+  assert.match(read('README.md'), /signing/i);
   assert.doesNotMatch(read('service-worker.js'), /eth_sendTransaction|privateKey|signTransaction/);
+});
+
+test('Phase 2 keeps live observation in the service worker', () => {
+  assert.match(read('service-worker.js'), /quai_getBalance/);
+  assert.match(read('service-worker.js'), /OBSERVE_ADDRESS/);
+  assert.match(read('sidepanel/sidepanel.js'), /OBSERVE_ADDRESS/);
+  assert.match(read('sidepanel/sidepanel.html'), /DEMO 0 · LIVE OBSERVER/);
 });
 
 test('shared state is schema-versioned and merges defaults', () => {

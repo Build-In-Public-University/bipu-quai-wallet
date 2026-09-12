@@ -1,4 +1,4 @@
-# BIPU Wallet browser extension — Phase 1
+# BIPU Wallet browser extension — Phase 2
 
 This is the unpacked Manifest V3 shell for the teaching-first Quai wallet.
 
@@ -12,13 +12,13 @@ This is the unpacked Manifest V3 shell for the teaching-first Quai wallet.
 
 ## Scope
 
-Phase 1 proves the extension architecture only:
+Phase 2 proves the extension architecture and moves Demo 0 into it:
 
 - popup entry point
 - persistent side panel
 - MV3 service worker message bus
 - shared schema-versioned local state
 - narrow permissions
-- inert local fixture page
+- live Demo 0 native QUAI observation through the service worker
 
-It deliberately has no RPC reads, page scraping, provider detection, keys, signing, messaging, or external writes. The extension is useful before it is trusted.
+It deliberately has no page scraping, provider detection, keys, signing, messaging, or external writes. The extension is useful before it is trusted.
