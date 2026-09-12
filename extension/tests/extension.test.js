@@ -90,6 +90,19 @@ test('Demo 6 stores familiarity separately from authorization and exposes invali
   assert.match(panel, /Local familiarity never replaces live chain verification or authorizes signing/);
 });
 
+test('Demo 7 keeps NFT holder lookup read-only and fail-closed', () => {
+  const nft = read('core/nft.js');
+  const worker = read('service-worker.js');
+  const panel = read('sidepanel/sidepanel.js');
+  assert.match(nft, /validateNftRequest/);
+  assert.match(nft, /No current indexer records returned/);
+  assert.match(nft, /not a social graph/);
+  assert.match(worker, /getTokenHolders/);
+  assert.match(worker, /NFT_HOLDERS/);
+  assert.match(panel, /CURRENT INDEXER DATA/);
+  assert.doesNotMatch(panel, /eth_sendTransaction|signTransaction/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);

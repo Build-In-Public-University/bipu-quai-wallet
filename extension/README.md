@@ -25,5 +25,6 @@ This slice proves the extension architecture and moves Demos 0–3 into it:
 - Demo 4 provider-gated native QUAI transfer preparation and approval boundary
 - Demo 5 bounded, evidence-labeled Ask Quai answers tied to observed context
 - Demo 6 browser-local operation familiarity with explicit invalidation
+- Demo 7 read-only NFT object inspection and current holder/indexer lookup
 
-It deliberately has no page scraping, private-key handling, or silent signing. Unknown selectors and unsupported questions remain unknown. Cached familiarity never replaces live verification or authorizes signing. The extension is useful before it is trusted.
+It deliberately has no page scraping, private-key handling, or silent signing. Unknown selectors and unsupported questions remain unknown. Cached familiarity never replaces live verification or authorizes signing. Holder records are not a social graph or contact permission. The extension is useful before it is trusted.

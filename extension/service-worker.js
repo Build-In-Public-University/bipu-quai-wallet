@@ -1,6 +1,7 @@
 import { DEFAULT_STATE, STATE_KEY, mergeState } from './core/state.js';
 import { answerQuestion } from './core/ask-quai.js';
 import { CACHE_KEY, compareOperation, operationFingerprint } from './core/cache.js';
+import { holderResult, validateNftRequest } from './core/nft.js';
 
 const RPC_URL = 'https://rpc.quai.network/cyprus1';
 const SCAN_URL = 'https://quaiscan.io/api';
@@ -33,6 +34,15 @@ async function observeAddress(address) {
     scan('tokentx', address)
   ]);
   return { address, balance, chainId, blockNumber, tokenList, transfers, observedAt: new Date().toISOString(), sources: { rpc: RPC_URL, assets: `${SCAN_URL}?module=account&action=tokenlist`, activity: `${SCAN_URL}?module=account&action=tokentx` } };
+}
+
+async function nftHolders(contract, tokenId) {
+  const request = validateNftRequest(contract, tokenId);
+  const url = `${SCAN_URL}?module=token&action=getTokenHolders&contractaddress=${encodeURIComponent(request.contract)}&tokenId=${encodeURIComponent(request.tokenId)}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`QuaiScan holder lookup failed (${response.status}).`);
+  const payload = await response.json();
+  return { ...request, ...holderResult(Array.isArray(payload.result) ? payload.result : []), source: url };
 }
 
 async function activeTabId(sender) {
@@ -103,6 +113,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'VALIDATE_OPERATION') {
     chrome.storage.local.get(CACHE_KEY).then((stored) => sendResponse({ ok: true, comparison: compareOperation(stored[CACHE_KEY], operationFingerprint(message.operation)) })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message?.type === 'NFT_HOLDERS') {
+    nftHolders(message.contract, message.tokenId).then((result) => sendResponse({ ok: true, result })).catch((error) => sendResponse({ ok: false, error: error.message }));
     return true;
   }
   if (message?.type === 'OPEN_SIDE_PANEL') {
