@@ -109,6 +109,17 @@ test('Demo 7 keeps NFT holder lookup read-only and fail-closed', () => {
   assert.doesNotMatch(panel, /eth_sendTransaction|signTransaction/);
 });
 
+test('Demo 8 keeps network policy local, explicit, and explainable', () => {
+  const policy = read('core/policy.js');
+  const panel = read('sidepanel/sidepanel.js');
+  assert.match(policy, /network mismatch/);
+  assert.match(policy, /links quarantined/);
+  assert.match(policy, /policyReport/);
+  assert.match(panel, /AUDITABLE POLICY OUTCOMES/);
+  assert.match(panel, /No message was sent/);
+  assert.doesNotMatch(panel, /fetch\(|eth_sendTransaction|signTransaction/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);
