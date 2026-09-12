@@ -44,6 +44,16 @@ test('Demo 1 keeps normalized assets and activity source-labeled', () => {
   assert.match(read('sidepanel/sidepanel.js'), /sources\.rpc/);
 });
 
+test('Demos 2 and 3 remain explain-only and fail closed on unknown selectors', () => {
+  const operation = read('core/operation.js');
+  const panel = read('sidepanel/sidepanel.js');
+  assert.match(operation, /WQUAI_WITHDRAW_SELECTOR/);
+  assert.match(operation, /No state change prediction is safe/);
+  assert.match(panel, /Deterministic local interpretation/);
+  assert.match(panel, /does not execute, estimate gas, sign, or broadcast/);
+  assert.doesNotMatch(panel, /eth_sendTransaction|eth_sign|privateKey/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);

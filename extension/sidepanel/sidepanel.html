@@ -3,11 +3,12 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BIPU Teaching Panel</title><link rel="stylesheet" href="sidepanel.css"></head>
 <body>
   <main>
-    <header><div class="brand"><span class="mark">B</span><strong>BIPU WALLET</strong></div><span class="phase">PHASE 1</span></header>
+    <header><div class="brand"><span class="mark">B</span><strong>BIPU WALLET</strong></div><span class="phase">DEMOS 0–3</span></header>
     <section class="hero"><p class="eyebrow">TEACHING WORKSPACE</p><h1>Don't Trust.<br><span>Understand.</span></h1><p>One persistent panel for state, explanations, networks, practice, and graduation.</p></section>
     <section class="observe-card"><div class="label">DEMO 0 · LIVE OBSERVER</div><label for="address">Cyprus-1 address</label><div class="address-row"><input id="address" value="0x0000000000000000000000000000000000000000" spellcheck="false" autocomplete="off"><button id="observe" type="button">Observe</button></div><p class="small">Read-only. The service worker queries the Cyprus-1 RPC; no provider or page context is used.</p><div id="observation" aria-live="polite"><p class="muted">No observation loaded.</p></div></section>
+    <section class="operation-card"><div class="label">DEMOS 2–3 · EXPLAIN → PREDICT</div><div class="operation-fields"><label for="selector">Function selector<input id="selector" value="0x2e1a7d4d" spellcheck="false"></label><label for="amount">WQUAI amount<input id="amount" type="number" min="0" step="any" value="1"></label></div><div class="operation-actions"><button id="explain" type="button">Explain</button><button id="predict" class="secondary" type="button">Predict state change</button></div><div id="operation-output" aria-live="polite"><p class="muted">No operation understood.</p></div></section>
     <nav aria-label="Teaching modes"><button class="mode active" data-phase="observe">State</button><button class="mode" data-phase="understand">Understand</button><button class="mode" data-phase="network">Network</button><button class="mode" data-phase="practice">Practice</button><button class="mode" data-phase="graduate">Graduate</button></nav>
-    <section class="context"><span class="label">CURRENT CONTEXT</span><h2 id="context-title">No object selected</h2><p id="context-copy">Phase 2 observes native QUAI. Asset normalization and provider actions arrive in later phases.</p></section>
+    <section class="context"><span class="label">CURRENT CONTEXT</span><h2 id="context-title">No object selected</h2><p id="context-copy">Phase 2 observes native QUAI. Explain and Predict attach to this same wallet context.</p></section>
     <section class="boundary"><span class="label">BOUNDARY</span><p>No page scraping. No provider access. No keys. No signing. Observation is read-only.</p></section>
   </main>
   <script type="module" src="sidepanel.js"></script>
