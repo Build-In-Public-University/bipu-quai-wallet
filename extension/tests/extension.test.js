@@ -120,6 +120,19 @@ test('Demo 8 keeps network policy local, explicit, and explainable', () => {
   assert.doesNotMatch(panel, /fetch\(|eth_sendTransaction|signTransaction/);
 });
 
+test('Demo 9 keeps the learner sandbox local and quarantines the fixture', () => {
+  const sandbox = read('core/sandbox.js');
+  const panel = read('sidepanel/sidepanel.js');
+  const html = read('sidepanel/sidepanel.html');
+  assert.match(sandbox, /Learner #LOCAL-001/);
+  assert.match(sandbox, /QUARANTINED/);
+  assert.match(sandbox, /sent: false/);
+  assert.match(html, /PRACTICE SANDBOX/);
+  assert.match(panel, /No message was sent/);
+  assert.match(html, /Nothing here touches the chain/);
+  assert.doesNotMatch(panel, /eth_sendTransaction|signTransaction/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);
