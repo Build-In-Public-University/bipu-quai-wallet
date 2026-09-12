@@ -1,5 +1,6 @@
 import { DEFAULT_STATE, STATE_KEY, mergeState } from './core/state.js';
 import { answerQuestion } from './core/ask-quai.js';
+import { CACHE_KEY, compareOperation, operationFingerprint } from './core/cache.js';
 
 const RPC_URL = 'https://rpc.quai.network/cyprus1';
 const SCAN_URL = 'https://quaiscan.io/api';
@@ -93,6 +94,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === 'ASK_QUAI') {
     getState().then((state) => sendResponse({ ok: true, answer: answerQuestion(message.question, { selector: message.selector, wquaiBalance: message.wquaiBalance || state.selectedAsset?.balance }) })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message?.type === 'REMEMBER_OPERATION') {
+    const operation = operationFingerprint(message.operation);
+    chrome.storage.local.set({ [CACHE_KEY]: operation }).then(() => sendResponse({ ok: true, operation })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    return true;
+  }
+  if (message?.type === 'VALIDATE_OPERATION') {
+    chrome.storage.local.get(CACHE_KEY).then((stored) => sendResponse({ ok: true, comparison: compareOperation(stored[CACHE_KEY], operationFingerprint(message.operation)) })).catch((error) => sendResponse({ ok: false, error: error.message }));
     return true;
   }
   if (message?.type === 'OPEN_SIDE_PANEL') {

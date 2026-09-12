@@ -78,6 +78,18 @@ test('Demo 5 is bounded, evidence-labeled, and uncertain outside context', () =>
   assert.match(panel, /Uncertainty preserved/);
 });
 
+test('Demo 6 stores familiarity separately from authorization and exposes invalidation', () => {
+  const cache = read('core/cache.js');
+  const worker = read('service-worker.js');
+  const panel = read('sidepanel/sidepanel.js');
+  assert.match(cache, /CACHE_KEY/);
+  assert.match(cache, /Re-understand required/);
+  assert.match(cache, /changed/);
+  assert.match(worker, /REMEMBER_OPERATION/);
+  assert.match(worker, /VALIDATE_OPERATION/);
+  assert.match(panel, /Local familiarity never replaces live chain verification or authorizes signing/);
+});
+
 test('shared state is schema-versioned and merges defaults', () => {
   const state = read('core/state.js');
   assert.match(state, /schemaVersion: 1/);
