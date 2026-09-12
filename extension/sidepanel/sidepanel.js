@@ -1,0 +1,5 @@
+async function message(payload) { return chrome.runtime.sendMessage(payload); }
+const title = document.querySelector('#context-title');
+const copy = document.querySelector('#context-copy');
+const phaseCopy = { observe: ['No object selected', 'Phase 1 is a shell only. Network reads and provider actions arrive in later phases.'], understand: ['Understanding mode reserved', 'The operation explainer will attach to a selected object in Phase 2.'], network: ['Network mode reserved', 'NFT holders and policy controls will attach to an object in Phase 4.'], practice: ['Practice mode reserved', 'The temporary learner sandbox will move here in Phase 5.'], graduate: ['Graduation mode reserved', 'Observable gates will move here after the practice flow exists.'] };
+for (const button of document.querySelectorAll('.mode')) button.addEventListener('click', async () => { document.querySelector('.mode.active')?.classList.remove('active'); button.classList.add('active'); const phase = button.dataset.phase; [title.textContent, copy.textContent] = phaseCopy[phase]; await message({ type: 'SET_PHASE', phase }); });

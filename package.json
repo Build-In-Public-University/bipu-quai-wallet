@@ -5,6 +5,6 @@
   "description": "BIPU's teaching-first Quai wallet — Demo 0: The Wallet Can See.",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test"
+    "test": "node --test test/*.test.js extension/tests/*.test.js"
   }
 }
