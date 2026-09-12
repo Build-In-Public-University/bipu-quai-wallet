@@ -17,7 +17,7 @@ test('MV3 manifest has narrow Phase 1 permissions', () => {
 
 test('popup opens the side panel directly from the user gesture', () => {
   const popup = read('popup/popup.js');
-  assert.match(popup, /chrome\.sidePanel\.open\(\{ tabId \}\)/);
+  assert.match(popup, /chrome\.sidePanel\.open\(\{ windowId: chrome\.windows\.WINDOW_ID_CURRENT \}\)/);
   assert.doesNotMatch(popup, /OPEN_SIDE_PANEL/);
 });
 
