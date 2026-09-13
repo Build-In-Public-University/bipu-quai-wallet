@@ -1,6 +1,6 @@
 # Phase 1 Threat Model
 
-Status: draft for review
+Status: reviewed — blockers identified
 
 ## Assets
 

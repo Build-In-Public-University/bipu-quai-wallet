@@ -20,6 +20,10 @@ No keys. No signing. No transaction side effects.
 
 Demo 4 adds a provider-gated request path. A compatible browser wallet remains the signer. BIPU requests the active account, prepares a small native QUAI transfer, renders the from/to/value/raw value, and only then exposes `eth_sendTransaction` behind an explicit `Approve & send` click. Verification does not trigger that button.
 
+## Receipts
+
+A sanitized session log and receipt index document the hardening work and verification outputs: [`receipts/README.md`](receipts/README.md). The receipt is process evidence, not production-release approval.
+
 ## Run it
 
 Requires Node.js 20+.

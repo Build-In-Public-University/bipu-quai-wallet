@@ -2,47 +2,43 @@ import { DEFAULT_STATE, STATE_KEY, mergeState } from './core/state.js';
 import { answerQuestion } from './core/ask-quai.js';
 import { CACHE_KEY, compareOperation, operationFingerprint } from './core/cache.js';
 import { holderResult, validateNftRequest } from './core/nft.js';
+import { isQuaiAddress, validateQuaiAddress } from './core/address.js';
+import { validateNativeTransferIntent, toProviderTransaction } from './core/transaction-intent.js';
+import { validateProviderContext } from './core/provider-context.js';
+import { createTransferRecord, updateTransferRecord } from './core/reconciliation.js';
+import { rpcRequest, indexerRequest } from './core/transport.js';
+import { validateRuntimeMessage } from './core/message-validation.js';
 
 const RPC_URL = 'https://rpc.quai.network/cyprus1';
 const SCAN_URL = 'https://quaiscan.io/api';
 
 async function rpc(method, params = []) {
-  const response = await fetch(RPC_URL, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', method, params, id: Date.now() }) });
-  if (!response.ok) throw new Error(`Quai RPC responded with HTTP ${response.status}`);
-  const payload = await response.json();
-  if (payload.error) throw new Error(payload.error.message || 'Quai RPC error');
-  return payload.result;
+  return rpcRequest(RPC_URL, method, params);
 }
 
 async function scan(action, address) {
-  const response = await fetch(`${SCAN_URL}?module=account&action=${action}&address=${encodeURIComponent(address)}`);
-  if (!response.ok) throw new Error(`QuaiScan responded with HTTP ${response.status}`);
-  const payload = await response.json();
-  if (payload.status === '0' && action !== 'tokenlist') throw new Error(payload.message || 'QuaiScan returned no data');
-  return Array.isArray(payload.result) ? payload.result : [];
+  return indexerRequest(`${SCAN_URL}?module=account&action=${action}&address=${encodeURIComponent(address)}`);
 }
 
-function isAddress(value) { return /^0x[a-fA-F0-9]{40}$/.test(value.trim()); }
+function isAddress(value) { return isQuaiAddress(value?.trim()); }
 
 async function observeAddress(address) {
-  if (!isAddress(address)) throw new Error('Expected 0x followed by 40 hexadecimal characters.');
+  const normalizedAddress = validateQuaiAddress(address);
   const [balance, chainId, blockNumber, tokenList, transfers] = await Promise.all([
-    rpc('quai_getBalance', [address, 'latest']),
+    rpc('quai_getBalance', [normalizedAddress, 'latest']),
     rpc('quai_chainId'),
     rpc('quai_blockNumber'),
-    scan('tokenlist', address),
-    scan('tokentx', address)
+    scan('tokenlist', normalizedAddress),
+    scan('tokentx', normalizedAddress)
   ]);
-  return { address, balance, chainId, blockNumber, tokenList, transfers, observedAt: new Date().toISOString(), sources: { rpc: RPC_URL, assets: `${SCAN_URL}?module=account&action=tokenlist`, activity: `${SCAN_URL}?module=account&action=tokentx` } };
+  return { address: normalizedAddress, balance, chainId, blockNumber, tokenList, transfers, observedAt: new Date().toISOString(), sources: { rpc: RPC_URL, assets: `${SCAN_URL}?module=account&action=tokenlist`, activity: `${SCAN_URL}?module=account&action=tokentx` } };
 }
 
 async function nftHolders(contract, tokenId) {
   const request = validateNftRequest(contract, tokenId);
   const url = `${SCAN_URL}?module=token&action=getTokenHolders&contractaddress=${encodeURIComponent(request.contract)}&tokenId=${encodeURIComponent(request.tokenId)}`;
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`QuaiScan holder lookup failed (${response.status}).`);
-  const payload = await response.json();
-  return { ...request, ...holderResult(Array.isArray(payload.result) ? payload.result : []), source: url };
+  const result = await indexerRequest(url);
+  return { ...request, ...holderResult(result), source: url };
 }
 
 async function activeTabId(sender) {
@@ -60,6 +56,27 @@ async function providerRequest(sender, method, params = []) {
     return { provider: window.pelagus ? 'pelagus' : 'ethereum', result: await candidate.request({ method: requestMethod, params: requestParams }) };
   }, args: [method, params] });
   return results[0]?.result;
+}
+
+async function verifyProviderContext(sender, intent) {
+  const chain = await providerRequest(sender, 'eth_chainId');
+  const accounts = await providerRequest(sender, 'eth_accounts');
+  return validateProviderContext({ provider: chain.provider, chainId: chain.result, accounts: accounts.result }, intent);
+}
+
+async function reconcileProviderAcceptance(intent, provider, hash) {
+  const record = createTransferRecord(intent, provider, hash);
+  let next = record;
+  try {
+    const transaction = await rpc('quai_getTransactionByHash', [hash]);
+    const receipt = await rpc('quai_getTransactionReceipt', [hash]);
+    next = updateTransferRecord(record, transaction, receipt);
+  } catch (error) {
+    next = { ...record, state: 'reconciliation_unknown', reasons: [`independent readback failed: ${error.message}`], updatedAt: new Date().toISOString() };
+  }
+  const state = await getState();
+  await setState({ ...state, pendingTransfer: next });
+  return next;
 }
 
 async function getState() {
@@ -82,6 +99,12 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  try {
+    message = validateRuntimeMessage(message);
+  } catch (error) {
+    sendResponse({ ok: false, error: error.message });
+    return false;
+  }
   if (message?.type === 'GET_STATE') {
     getState().then((state) => sendResponse({ ok: true, state }));
     return true;
@@ -99,7 +122,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
   if (message?.type === 'SEND_TRANSACTION') {
-    providerRequest(sender, 'eth_sendTransaction', [message.transaction]).then((result) => sendResponse({ ok: true, hash: result.result })).catch((error) => sendResponse({ ok: false, error: error.message }));
+    try {
+      const intent = validateNativeTransferIntent(message.intent);
+      verifyProviderContext(sender, intent).then((context) => providerRequest(sender, 'eth_sendTransaction', [toProviderTransaction(intent)]).then((result) => reconcileProviderAcceptance(intent, context.provider, result.result).then((reconciliation) => sendResponse({ ok: reconciliation.state === 'confirmed', state: reconciliation.state, hash: result.result, intent, provider: context.provider, reconciliation })))).catch((error) => sendResponse({ ok: false, error: error.message }));
+    } catch (error) {
+      sendResponse({ ok: false, error: error.message });
+    }
     return true;
   }
   if (message?.type === 'ASK_QUAI') {

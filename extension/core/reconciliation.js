@@ -3,8 +3,26 @@ export const RECONCILIATION_STATES = Object.freeze([
   'failed_on_chain', 'provider_rejected', 'reconciliation_unknown', 'replaced', 'reorg_detected'
 ]);
 
+export function createTransferRecord(intent, provider, hash) {
+  return {
+    schemaVersion: 1,
+    hash,
+    provider,
+    intent,
+    state: 'provider_accepted',
+    reasons: ['provider accepted request; independent confirmation pending'],
+    updatedAt: new Date().toISOString()
+  };
+}
+
+export function updateTransferRecord(record, transaction, receipt) {
+  const result = reconcileReceipt(record.intent, transaction, receipt);
+  return { ...record, ...result, updatedAt: new Date().toISOString() };
+}
+
 export function reconcileReceipt(intent, transaction, receipt) {
-  if (!transaction || !receipt) return { state: 'reconciliation_unknown', reasons: ['transaction or receipt unavailable'] };
+  if (!transaction) return { state: 'reconciliation_unknown', reasons: ['transaction unavailable'] };
+  if (!receipt) return { state: 'pending_inclusion', reasons: ['receipt unavailable; transaction readback exists'] };
   const reasons = [];
   if (transaction.chainId && transaction.chainId.toLowerCase() !== intent.chainId.toLowerCase()) reasons.push('chain ID mismatch');
   if (transaction.from?.toLowerCase() !== intent.from) reasons.push('sender mismatch');
