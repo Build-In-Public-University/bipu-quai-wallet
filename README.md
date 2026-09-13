@@ -22,7 +22,7 @@ Demo 4 adds a provider-gated request path. A compatible browser wallet remains t
 
 ## Receipts
 
-A sanitized session log and receipt index document the hardening work and verification outputs: [`receipts/README.md`](receipts/README.md). The receipt is process evidence, not production-release approval.
+A T0-to-present reconstructed session ledger, plus the earlier hardening excerpt, document the project decisions and verification outputs: [`receipts/README.md`](receipts/README.md). The receipt is process evidence, not production-release approval.
 
 ## Run it
 

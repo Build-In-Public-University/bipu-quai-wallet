@@ -2,13 +2,22 @@
   "schema": "bipu.receipt-index.v1",
   "project": "bipu-quai-wallet",
   "receipt_marker": "RECEIPTS",
+  "coverage_start": "2026-09-11T14:02:00",
+  "coverage_end": "2026-09-13",
+  "session_reference": "@session:default/20260911_140203_3e4317",
   "receipt_link": null,
   "artifacts": [
     {
+      "path": "receipts/chat-log-t0-to-2026-09-13.md",
+      "kind": "reconstructed_sanitized_chat_log",
+      "scope": "T0 Hackyard brief through Phase 1 hardening and runtime verification",
+      "source": "retained local Hermes CLI session"
+    },
+    {
       "path": "receipts/chat-log-2026-09-13-hardening.md",
-      "kind": "sanitized_chat_log",
-      "scope": "threat-model-driven Phase 1 hardening",
-      "source": "local Hermes CLI session"
+      "kind": "sanitized_chat_log_excerpt",
+      "scope": "Phase 1 hardening excerpt",
+      "source": "retained local Hermes CLI session"
     }
   ],
   "privacy": {
